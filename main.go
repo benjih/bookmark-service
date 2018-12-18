@@ -16,6 +16,7 @@ const (
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/api/bookmarks/", handlers.StoreBookmarksHandler).Methods("POST")
+	r.HandleFunc("/api/bookmarks/", handlers.GetBookmarksHandler).Methods("GET")
 	r.HandleFunc("/api/bookmarks/", handlers.DeleteUrlsHandler).Methods("DELETE")
 
 	log.Print("Starting bookmark-service on " + port)
