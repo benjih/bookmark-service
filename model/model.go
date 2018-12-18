@@ -9,3 +9,7 @@ type Bookmark struct {
 	URL     string
 	Entries []*Bookmark
 }
+
+type DeleteRequest struct {
+	URLs []string
+}

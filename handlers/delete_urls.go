@@ -1,19 +1,28 @@
 package handlers
 
 import (
-	"log"
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
+
+	"github.com/benjih/bookmark-service/controllers"
+	"github.com/benjih/bookmark-service/model"
 )
 
 func DeleteUrlsHandler(w http.ResponseWriter, r *http.Request) {
-	queryValues := r.URL.Query()
-	urlsToDelete := queryValues["urls"]
-
-	if len(urlsToDelete) == 0 {
+	requestBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		w.WriteHeader(500)
+		return
+	}
+	deleteRequest := &model.DeleteRequest{}
+	if err = json.Unmarshal(requestBody, deleteRequest); err != nil {
 		w.WriteHeader(400)
 		return
 	}
-	log.Print(urlsToDelete)
+	if len(deleteRequest.URLs) > 0 {
+		controllers.DeleteBookmarkByUrls(deleteRequest.URLs)
+	}
 
 	w.WriteHeader(200)
 }
