@@ -13,7 +13,7 @@ const (
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/api/bookmarks/__urls", DeleteUrlsHandler).Methods("DELETE")
+	r.HandleFunc("/api/bookmarks/", DeleteUrlsHandler).Methods("DELETE")
 
 	log.Print("Starting bookmark-service on " + port)
 
@@ -21,5 +21,14 @@ func main() {
 }
 
 func DeleteUrlsHandler(w http.ResponseWriter, r *http.Request) {
+	queryValues := r.URL.Query()
+	urlsToDelete := queryValues["urls"]
+
+	if len(urlsToDelete) == 0 {
+		w.WriteHeader(400)
+		return
+	}
+	log.Print(urlsToDelete)
+
 	w.WriteHeader(200)
 }
